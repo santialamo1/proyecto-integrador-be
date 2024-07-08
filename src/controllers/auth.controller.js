@@ -1,6 +1,6 @@
 const passport = require('passport');
 const { generateToken } = require('../utils/jwt');
-const UserDAO = require('../daos/user.dao');
+const UserDAO = require('../repositories/user.repository');
 
 class AuthController {
     async register(req, res, next) {
@@ -24,16 +24,6 @@ class AuthController {
     async logout(req, res) {
         res.clearCookie('jwt');
         res.redirect('/login');
-    }
-
-    async githubCallback(req, res, next) {
-        passport.authenticate('github', (err, user, info) => {
-            if (err) return next(err);
-            if (!user) return res.redirect('/login');
-            const token = generateToken(user);
-            res.cookie('jwt', token, { httpOnly: true });
-            res.redirect('/products');
-        })(req, res, next);
     }
 }
 
