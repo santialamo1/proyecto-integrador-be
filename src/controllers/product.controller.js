@@ -1,4 +1,5 @@
 const productDAO = require('../dao/product.dao');
+const { createError, errorTypes } = require('../utils/errors');
 
 class ProductController {
     async createProduct(req, res) {
@@ -38,9 +39,10 @@ class ProductController {
         try {
             const { id } = req.params;
             const product = await productDAO.getProductById(id);
+            if (!product) throw createError(errorTypes.PRODUCT_NOT_FOUND);
             res.status(200).json({ status: 'success', payload: product });
         } catch (error) {
-            res.status(500).json({ status: 'error', message: error.message });
+            res.status(error.statusCode || 500).json({ status: 'error', message: error.message });
         }
     }
 
