@@ -7,6 +7,9 @@ const cartsRouter = require('./src/routes/carts.router.js');
 const authRouter = require('./src/routes/auth.router.js');
 const sessionsRouter = require('./src/routes/sessions.router.js');
 const mockRouter = require('./src/routes/mock.router.js');
+const loggerRouter = require('./src/routes/logger.router.js');
+const forgotPasswordRouter = require('./src/routes/forgotPassword.js');
+const resetPasswordRouter = require('./src/routes/resetPassword.js');
 const { connectDB } = require('./src/config/index.js');
 const cookieParser = require('cookie-parser');
 const passport = require('./src/config/passport');
@@ -43,6 +46,9 @@ app.use('/api/carts', cartsRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/sessions', sessionsRouter);
 app.use('/api', mockRouter);
+app.use('/api', loggerRouter);
+app.use('/api', forgotPasswordRouter);
+app.use('/api', resetPasswordRouter);
 
 app.listen(PORT, err => {
     if (err) console.log('Error: ', err);
