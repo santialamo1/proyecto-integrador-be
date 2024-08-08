@@ -5,6 +5,62 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const { jwtSecret } = require('../config/config');
 
+/**
+ * @swagger
+ * /api/reset-password/{token}:
+ *   post:
+ *     summary: Reset user password
+ *     description: Resets the user's password using a token sent to their email. The token expires after 1 hour.
+ *     parameters:
+ *       - in: path
+ *         name: token
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The password reset token
+ *       - in: body
+ *         name: body
+ *         description: New password to be set
+ *         required: true
+ *         schema:
+ *           type: object
+ *           properties:
+ *             newPassword:
+ *               type: string
+ *               description: The new password for the user
+ *               example: "newSecurePassword123"
+ *     responses:
+ *       200:
+ *         description: Password has been successfully reset
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: 'Password has been reset'
+ *       400:
+ *         description: Invalid or expired token, or new password is the same as the old one
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: 'Password reset token is invalid or has expired'
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: 'Server error'
+ */
 router.post('/reset-password/:token', async (req, res) => {
     const { token } = req.params;
     const { newPassword } = req.body;
