@@ -9,7 +9,12 @@ const UserSchema = new Schema({
     cart: { type: Schema.Types.ObjectId, ref: 'Cart' },
     role: { type: String, default: 'user' },
     resetPasswordToken: { type: String },
-    resetPasswordExpires: { type: Date }
+    resetPasswordExpires: { type: Date },
+    documents: [{
+        name: { type: String },
+        reference: { type: String }
+    }],
+    last_connection: { type: Date }
 });
 
 const UserModel = model('User', UserSchema);

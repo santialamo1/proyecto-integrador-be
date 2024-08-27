@@ -1,5 +1,6 @@
 const { Router } = require('express');
 const userController = require('../../controllers/user.controller');
+const upload = require('../../config/multerConfig');
 
 const router = Router();
 
@@ -312,10 +313,128 @@ const router = Router();
  *                   example: 'Server error'
  */
 
+/**
+ * @swagger
+ * /api/users/{id}/documents:
+ *   post:
+ *     summary: Upload documents for a user
+ *     description: Uploads one or more documents for the user.
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: User ID
+ *         schema:
+ *           type: string
+ *           example: "605c72ef16f2d82d8a2c1b3e"
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               files:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                   format: binary
+ *     responses:
+ *       200:
+ *         description: Documents uploaded successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: 'Documents uploaded successfully'
+ *       400:
+ *         description: Bad request, invalid file format
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: 'Invalid file format'
+ *       404:
+ *         description: User not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: 'User not found'
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: 'Server error'
+ */
+
+/**
+ * @swagger
+ * /api/users/{id}/premium:
+ *   patch:
+ *     summary: Assign premium role to user
+ *     description: Assigns the premium role to a user by user ID.
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: User ID
+ *         schema:
+ *           type: string
+ *           example: "605c72ef16f2d82d8a2c1b3e"
+ *     responses:
+ *       200:
+ *         description: Premium role assigned successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: 'Premium role assigned successfully'
+ *       404:
+ *         description: User not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: 'User not found'
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: 'Server error'
+ */
+
 router.post('/', userController.createUser);
 router.get('/email/:email', userController.getUserByEmail);
 router.get('/:id', userController.getUserById);
 router.put('/:id', userController.updateUser);
 router.delete('/:id', userController.deleteUser);
+router.post('/:id/documents', upload.array('files'), userController.uploadDocuments);
+router.patch('/:id/premium', userController.assignPremiumRole);
 
 module.exports = router;
